@@ -54,6 +54,49 @@ server.post('/api/users', (req, res) => {
     }
 });
 
+server.delete('/users/:id', (req, res) => {
+    const id = req.params.id;
+    const user = db.getUserById(id);
+
+    if (user) {
+        db.deleteUser(id);
+    } if (!user) {
+        res.status(404).json({
+            message: "The user does not exist"
+        })
+    } else {
+        res.status(500).json({
+            message: "There was an error deleting the user"
+        })
+    }
+})
+
+server.put('/users/:id', (req, res) => {
+    const id = req.params.id;
+    const user = db.getUserById(id);
+    const {name, bio} = req.body;
+
+    if (user) {
+        const updatedUser = db.updateUser(id, {
+            name: req.body.name,
+            bio: req.body.bio
+        })
+        res.status(200).json(updatedUser);
+    } if (!user) {
+        res.status(404).json({
+            message: "User not found."
+        })
+    } if (!name || !bio) {
+        res.status(400).json({
+            message: "Please provide a name and bio for the user."
+        })
+    } else {
+        res.status(500).json({
+            message: "There was an error updating the user information"
+        })
+    }
+})
+
 
 server.listen(8080, () => {
     console.log('server started')
