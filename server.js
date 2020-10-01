@@ -36,7 +36,7 @@ server.get('/api/users/:id', (req, res) => {
 
 server.post('/api/users', (req, res) => {
     const {name, bio} = req.body;
-    if (name || bio) {
+    if (name && bio) {
         const newUser = db.createUser({
             name: req.body.name,
             bio: req.body.bio
@@ -54,12 +54,13 @@ server.post('/api/users', (req, res) => {
     }
 });
 
-server.delete('/users/:id', (req, res) => {
+server.delete('/api/users/:id', (req, res) => {
     const id = req.params.id;
     const user = db.getUserById(id);
 
     if (user) {
         db.deleteUser(id);
+        res.status(204).end();
     } if (!user) {
         res.status(404).json({
             message: "The user does not exist"
@@ -71,7 +72,7 @@ server.delete('/users/:id', (req, res) => {
     }
 })
 
-server.put('/users/:id', (req, res) => {
+server.put('/api/users/:id', (req, res) => {
     const id = req.params.id;
     const user = db.getUserById(id);
     const {name, bio} = req.body;
