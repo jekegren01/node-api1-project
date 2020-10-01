@@ -77,7 +77,11 @@ server.put('/api/users/:id', (req, res) => {
     const user = db.getUserById(id);
     const {name, bio} = req.body;
 
-    if (user) {
+    if (!name || !bio) {
+        res.status(400).json({
+            message: "Please provide a name and bio for the user."
+        })
+    } else if (user) {
         const updatedUser = db.updateUser(id, {
             name: req.body.name,
             bio: req.body.bio
@@ -86,10 +90,6 @@ server.put('/api/users/:id', (req, res) => {
     } else if (!user) {
         res.status(404).json({
             message: "User not found."
-        })
-    } else if (!name || !bio) {
-        res.status(400).json({
-            message: "Please provide a name and bio for the user."
         })
     } else {
         res.status(500).json({
