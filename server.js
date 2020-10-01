@@ -23,7 +23,7 @@ server.get('/api/users/:id', (req, res) => {
 
     if (user) {
         res.json(user);
-    } if(!user) {
+    } else if(!user) {
         res.status(404).json({
             message: "The user does not exist"
         });
@@ -41,8 +41,8 @@ server.post('/api/users', (req, res) => {
             name: req.body.name,
             bio: req.body.bio
         });
-        res.status(201).json(newUser);
-    } if (!name || !bio) {
+        res.status(201).json(newUser).end();
+    } else if (!name || !bio) {
         res.status(400).json({
             message: "Please provide name and bio for the user."
         });
@@ -61,7 +61,7 @@ server.delete('/api/users/:id', (req, res) => {
     if (user) {
         db.deleteUser(id);
         res.status(204).end();
-    } if (!user) {
+    } else if (!user) {
         res.status(404).json({
             message: "The user does not exist"
         })
@@ -83,11 +83,11 @@ server.put('/api/users/:id', (req, res) => {
             bio: req.body.bio
         })
         res.status(200).json(updatedUser);
-    } if (!user) {
+    } else if (!user) {
         res.status(404).json({
             message: "User not found."
         })
-    } if (!name || !bio) {
+    } else if (!name || !bio) {
         res.status(400).json({
             message: "Please provide a name and bio for the user."
         })
